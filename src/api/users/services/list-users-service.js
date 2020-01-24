@@ -1,14 +1,12 @@
 const connection = require('../../../database/mongoose-service');
 const userSchema = require('../../../database/user-schema');
 
-// const User = connection.model('User', userSchema);
+const User = connection.model('User', userSchema);
 
 async function listUserService() {
+  const users = await User.find({});
   return {
-    users: [
-      { id: '1', login: 'Ilya', password: 'pass' },
-      { id: '2', login: 'Oleg', password: 'pass' },
-    ],
+    users,
   };
 }
 
