@@ -1,19 +1,21 @@
-require('dotenv').config();
-const uuid = require('uuid/v4');
-const jwt = require('jsonwebtoken');
-
 const connection = require('../../../database/mongoose-service');
 const userSchema = require('../../../database/user-schema');
+const tokenSchema = require('../../../database/token-schema');
 
 const User = connection.model('User', userSchema);
+const Token = connection.model('Token', tokenSchema);
 
 async function loginService({ login, password }) {
   const user = await User.authentication(login, password);
-  const secret = process.env.JWT_SECRET;
+
+  const accessToken = await Token.genAccessToken(user.id, { expiresIn: '5m' });
+  const refreshToken = await Token.genRefreshToken();
+
+  await Token.create({ userId: user.id, refreshToken });
 
   return {
-    token: jwt.sign({ id: user.id }, secret, { expiresIn: '15s' }),
-    refreshToken: uuid(),
+    token: accessToken,
+    refreshToken: refreshToken,
   };
 }
 

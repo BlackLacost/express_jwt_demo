@@ -1,4 +1,5 @@
 const loginService = require('./services/login-service');
+const refreshService = require('./services/refresh-service');
 
 async function login(req, res, next) {
   try {
@@ -8,6 +9,15 @@ async function login(req, res, next) {
   }
 }
 
+async function refresh(req, res, next) {
+  try {
+    res.json(await refreshService(req.body));
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   login,
+  refresh,
 };
