@@ -1,6 +1,6 @@
-const connection = require('../../../database/mongoose-service');
-const userSchema = require('../../../database/user-schema');
-const tokenSchema = require('../../../database/token-schema');
+const connection = require('../../database/mongoose-service');
+const userSchema = require('../../database/user-schema');
+const tokenSchema = require('../../database/token-schema');
 
 const User = connection.model('User', userSchema);
 const Token = connection.model('Token', tokenSchema);

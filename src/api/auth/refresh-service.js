@@ -1,7 +1,7 @@
 require('dotenv').config();
 
-const connection = require('../../../database/mongoose-service');
-const tokenSchema = require('../../../database/token-schema');
+const connection = require('../../database/mongoose-service');
+const tokenSchema = require('../../database/token-schema');
 
 const Token = connection.model('Token', tokenSchema);
 

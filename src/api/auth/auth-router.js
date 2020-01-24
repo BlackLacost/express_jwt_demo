@@ -2,9 +2,9 @@ require('dotenv').config();
 const { Router } = require('express');
 const jwtMiddleware = require('express-jwt');
 
-const loginService = require('./services/login-service');
-const logoutService = require('./services/logout-service');
-const refreshService = require('./services/refresh-service');
+const loginService = require('./login-service');
+const logoutService = require('./logout-service');
+const refreshService = require('./refresh-service');
 const makeController = require('../../make-controller');
 
 const router = Router();
