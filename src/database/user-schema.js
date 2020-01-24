@@ -11,4 +11,13 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.post('save', (error, doc, next) => {
+  if (error.name === 'ValidationError') {
+    error.status = 400;
+    next(error);
+  } else {
+    next();
+  }
+});
+
 module.exports = userSchema;

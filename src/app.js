@@ -13,6 +13,14 @@ app.get('/', (req, res) => res.send('API for JWT testing'));
 
 app.use(`${apiRoot}`, apiRouter);
 
-// TODO Create Error Handler
+app.use((err, req, res, next) => {
+  const error = req.app.get('env') === 'development' ? err : {};
+  res.status(err.status || 500);
+  const jsonRes =
+    req.app.get('env') === 'development'
+      ? { error, message: err.message }
+      : { message: '500 (Internal Server Error)' };
+  res.json(jsonRes);
+});
 
 module.exports = app;
