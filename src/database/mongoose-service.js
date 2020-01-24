@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const debug = require('debug')('app:mongo');
 
-mongoose.Promise = Promise;
+mongoose.Promise = global.Promise;
 const connectionString = process.env.MONGO_CONNECTION_STRING;
 
 const connection = mongoose.createConnection(connectionString, {

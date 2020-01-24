@@ -5,6 +5,16 @@ const userSchema = new Schema({
   password: { type: String, required: true },
 });
 
+userSchema.statics.authentication = async function(login, password) {
+  const user = await this.findOne({ login });
+  if (!user || user.password !== password) {
+    const err = new Error('Credentials error');
+    err.status = 403;
+    throw err;
+  }
+  return user;
+};
+
 userSchema.post('save', (error, doc, next) => {
   if (error.name === 'ValidationError') {
     error.status = 400;
