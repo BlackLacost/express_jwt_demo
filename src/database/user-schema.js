@@ -1,4 +1,6 @@
+require('dotenv').config();
 const { Schema } = require('mongoose');
+const { hash, genSalt, compare } = require('bcryptjs');
 
 const userSchema = new Schema({
   login: { type: String, required: true, unique: true },
@@ -7,13 +9,23 @@ const userSchema = new Schema({
 
 userSchema.statics.authentication = async function(login, password) {
   const user = await this.findOne({ login });
-  if (!user || user.password !== password) {
+  if (!user || !(await compare(password, user.password))) {
     const err = new Error('Credentials error');
     err.status = 403;
     throw err;
   }
   return user;
 };
+
+userSchema.pre('save', async function(next) {
+  const salt_factor = Number(process.env.SALT_FACTOR);
+  if (!this.isModified('password')) return next();
+
+  const salt = await genSalt(salt_factor);
+  const hashedPassword = await hash(this.password, salt);
+  this.password = hashedPassword;
+  next();
+});
 
 userSchema.post('save', (error, doc, next) => {
   if (error.name === 'ValidationError') {
