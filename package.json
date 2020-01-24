@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/server",
-    "dev": "cross-env DEBUG=app* nodemon --watch .env ./src/server"
+    "dev": "cross-env DEBUG=app* nodemon --watch .env --watch ./src ./src/server"
   },
   "keywords": [],
   "author": "",

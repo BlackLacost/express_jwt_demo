@@ -1,7 +1,9 @@
 const { Router } = require('express');
 
+const { getUsers } = require('./users-controllers');
+
 const router = Router();
 
-router.get('/', (req, res) => res.send('Users API'));
+router.get('/', getUsers);
 
 module.exports = router;
