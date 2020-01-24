@@ -1,18 +1,28 @@
 require('dotenv').config();
-const uuid = require('uuid/v4');
-const jwt = require('jsonwebtoken');
 
 const connection = require('../../../database/mongoose-service');
-const userSchema = require('../../../database/user-schema');
+const tokenSchema = require('../../../database/token-schema');
 
-const User = connection.model('User', userSchema);
+const Token = connection.model('Token', tokenSchema);
 
 async function refreshService({ refreshToken }) {
-  const secret = process.env.JWT_SECRET;
+  const token = await Token.findOne({ refreshToken });
+  if (!token) {
+    const error = new Error('Not Found Refresh Token');
+    error.status = 404;
+    throw error;
+  }
+
+  const newAccessToken = await Token.genAccessToken(token.userId, { expiresIn: '5m' });
+  const newRefreshToken = await Token.genRefreshToken();
+
+  await Token.create({ userId: token.userId, refreshToken: newRefreshToken });
+
+  await Token.deleteOne({ refreshToken });
 
   return {
-    token: jwt.sign({ id: user.id }, secret, { expiresIn: '5m' }),
-    refreshToken: uuid(),
+    token: newAccessToken,
+    refreshToken: newRefreshToken,
   };
 }
 
