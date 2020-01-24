@@ -8,6 +8,7 @@ const connectionString = process.env.MONGO_CONNECTION_STRING;
 const connection = mongoose.createConnection(connectionString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 });
 
 connection
