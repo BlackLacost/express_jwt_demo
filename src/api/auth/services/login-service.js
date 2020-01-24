@@ -12,7 +12,7 @@ async function loginService({ login, password }) {
   const secret = process.env.JWT_SECRET;
 
   return {
-    token: jwt.sign({ id: user.id }, secret),
+    token: jwt.sign({ id: user.id }, secret, { expiresIn: '15s' }),
     refreshToken: uuid(),
   };
 }
