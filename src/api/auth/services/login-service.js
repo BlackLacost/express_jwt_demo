@@ -7,16 +7,8 @@ const Token = connection.model('Token', tokenSchema);
 
 async function loginService({ login, password }) {
   const user = await User.authentication(login, password);
-
-  const accessToken = await Token.genAccessToken(user.id, { expiresIn: '5m' });
-  const refreshToken = await Token.genRefreshToken();
-
-  await Token.create({ userId: user.id, refreshToken });
-
-  return {
-    token: accessToken,
-    refreshToken: refreshToken,
-  };
+  const token = await Token.createToken(user.id, { expiresIn: '5m' });
+  return token;
 }
 
 module.exports = loginService;

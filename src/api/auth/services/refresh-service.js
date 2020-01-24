@@ -12,18 +12,10 @@ async function refreshService({ refreshToken }) {
     error.status = 404;
     throw error;
   }
-
-  const newAccessToken = await Token.genAccessToken(token.userId, { expiresIn: '5m' });
-  const newRefreshToken = await Token.genRefreshToken();
-
-  await Token.create({ userId: token.userId, refreshToken: newRefreshToken });
-
+  const newToken = await Token.createToken(token.userId, { expiresIn: '5m' });
   await Token.deleteOne({ refreshToken });
 
-  return {
-    token: newAccessToken,
-    refreshToken: newRefreshToken,
-  };
+  return newToken;
 }
 
 module.exports = refreshService;
